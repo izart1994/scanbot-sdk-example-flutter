@@ -39,7 +39,21 @@ void main() => runApp(MyApp());
 // or may be terminated. You can get an unrestricted "no-strings-attached" 30 day trial license key for free.
 // Please submit the trial license form (https://scanbot.io/en/sdk/demo/trial) on our website by using
 // the app identifier "io.scanbot.example.flutter" of this example app or of your app.
-const SCANBOT_SDK_LICENSE_KEY = '';
+const SCANBOT_SDK_LICENSE_KEY = "UqKnefTu7adzp/pmz3BkTOtjU7RVVq" +
+    "oBsNDFJYLydI38/DXS/pFXVuho4TTa" +
+    "SwSJlkoMcQ4Mzj88YgvkkF/dKro4Tr" +
+    "ZBEWfBEhWHcQ9UfkB/KpXEGrVuVZKD" +
+    "NZj9yaa5EL+DeSPX1gn49sT8gSmZNC" +
+    "hWaFXjHixuot77Xv+/wiIPbgHGwPOk" +
+    "3m+iRz0a7DVNtUYhVzJxVtAaN/+Mvo" +
+    "9oSWAArt2FUWZ3tH1ZT83Aa4EfrJy3" +
+    "vK4NEld/5lCmarzjQwAS+nG6etTnuq" +
+    "tHAdVafAtuyKQQOOZdd9arnClX84gM" +
+    "aT7tapf+wfymV0+Hmv0jIz8SvF7AGJ" +
+    "YELP7n9J+rcQ==\nU2NhbmJvdFNESw" +
+    "pjb20uZXhhbXBsZS5zY2FuYm90X3Nk" +
+    "a19leGFtcGxlX2ZsdXR0ZXIKMTY5Nz" +
+    "Y3MzU5OQo4Mzg4NjA3CjE5\n";
 
 Future<void> _initScanbotSdk() async {
   // Consider adjusting this optional storageBaseDirectory - see the comments below.
@@ -286,9 +300,7 @@ class _MainPageWidgetState extends State<MainPageWidget> {
     try {
       final result = await ScanbotSdk.getLicenseStatus();
 
-      await showAlertDialog(context,
-          "Status: ${result.status} expirationDate: ${result.expirationDate}",
-          title: 'License Status');
+      await showAlertDialog(context, "Status: ${result.status} expirationDate: ${result.expirationDate}", title: 'License Status');
     } catch (e) {
       Logger.root.severe(e);
       await showAlertDialog(context, 'Error getting license status');
@@ -313,8 +325,7 @@ class _MainPageWidgetState extends State<MainPageWidget> {
       return;
     }
 
-    final dialog = ProgressDialog(context,
-        type: ProgressDialogType.Normal, isDismissible: false);
+    final dialog = ProgressDialog(context, type: ProgressDialogType.Normal, isDismissible: false);
     dialog.style(message: 'Processing');
     dialog.show();
     try {
@@ -373,10 +384,9 @@ class _MainPageWidgetState extends State<MainPageWidget> {
         topBarBackgroundColor: ScanbotRedColor,
         barcodeFormats: PredefinedBarcodes.allBarcodeTypes(),
         cameraOverlayColor: Colors.amber,
-        overlayConfiguration: SelectionOverlayConfiguration(overlayEnabled:true, polygonColor: Colors.red,automaticSelectionEnabled: false),
+        overlayConfiguration: SelectionOverlayConfiguration(overlayEnabled: true, polygonColor: Colors.red, automaticSelectionEnabled: false),
         finderAspectRatio: sdk.AspectRatio(width: 4, height: 2),
-        finderTextHint:
-            'Please align any supported barcode in the frame to scan it.',
+        finderTextHint: 'Please align any supported barcode in the frame to scan it.',
         viewFinderEnabled: true,
         /*  additionalParameters: BarcodeAdditionalParameters(
           enableGS1Decoding: false,
@@ -402,8 +412,7 @@ class _MainPageWidgetState extends State<MainPageWidget> {
     //handle result if it was returned
     if (result is BarcodeScanningResult) {
       await Navigator.of(context).push(
-        MaterialPageRoute(
-            builder: (context) => BarcodesResultPreviewWidget(result)),
+        MaterialPageRoute(builder: (context) => BarcodesResultPreviewWidget(result)),
       );
     }
   }
@@ -424,15 +433,13 @@ class _MainPageWidgetState extends State<MainPageWidget> {
 
   Future<void> _startMedicalCertificateCustomUIScanner() async {
     var result = await Navigator.of(context).push(
-      MaterialPageRoute(
-          builder: (context) => const MedicalCertificateScannerWidget()),
+      MaterialPageRoute(builder: (context) => const MedicalCertificateScannerWidget()),
     );
 
     //handle result if it was returned
     if (result is MedicalCertificateResult) {
       await Navigator.of(context).push(
-        MaterialPageRoute(
-            builder: (context) => MedicalCertificatePreviewWidget(result)),
+        MaterialPageRoute(builder: (context) => MedicalCertificatePreviewWidget(result)),
       );
     }
   }
@@ -445,36 +452,35 @@ class _MainPageWidgetState extends State<MainPageWidget> {
     GenericDocumentWrappedResults? result;
     try {
       var config = GenericDocumentRecognizerConfiguration(
-        acceptedDocumentTypes: [
-          GenericDocumentType.DE_DRIVER_LICENSE_FRONT,
-          GenericDocumentType.DE_DRIVER_LICENSE_BACK,
-          GenericDocumentType.DE_ID_CARD_FRONT,
-          GenericDocumentType.DE_ID_CARD_BACK,
-          GenericDocumentType.DE_PASSPORT,
-        ],
-        topBarBackgroundColor: Colors.red,
-        fieldConfidenceLowColor: Colors.blue,
-        fieldConfidenceHighColor: Colors.purpleAccent,
-        fieldsDisplayConfiguration: [
-          // All types of documents have its own class for field signatures, e.g. DeIdCardFront -> DeIdCardFrontFieldsSignatures. From this classes you can take field signatures for each field you want to configure.
-          FieldsDisplayConfiguration(DeIdCardFrontFieldsSignatures.Surname, "My Surname", FieldDisplayState.ALWAYS_VISIBLE),
-          FieldsDisplayConfiguration(DeIdCardFrontFieldsSignatures.GivenNames, "My GivenNames", FieldDisplayState.ALWAYS_VISIBLE),
-          FieldsDisplayConfiguration(DeIdCardFrontFieldsSignatures.BirthDate, "My Birth Date", FieldDisplayState.ALWAYS_VISIBLE),
-          FieldsDisplayConfiguration(DeIdCardFrontFieldsSignatures.ExpiryDate, "Document Expiry Date", FieldDisplayState.ALWAYS_VISIBLE),
-          FieldsDisplayConfiguration(DeIdCardBackFieldsSignatures.Address, "My address", FieldDisplayState.ALWAYS_VISIBLE),
-          FieldsDisplayConfiguration(DeIdCardBackFieldsSignatures.IssueDate, "When issued", FieldDisplayState.ALWAYS_VISIBLE),
-          FieldsDisplayConfiguration(DeIdCardBackFieldsSignatures.IssuingAuthority, "Who issued", FieldDisplayState.ALWAYS_VISIBLE),
-          FieldsDisplayConfiguration(MRZFieldsSignatures.DocumentNumber, "My Doc Num", FieldDisplayState.ALWAYS_VISIBLE),
-          FieldsDisplayConfiguration(MRZFieldsSignatures.Surname, "My Surname", FieldDisplayState.ALWAYS_VISIBLE),
-        ],
-        documentsDisplayConfiguration: [
-          DocumentsDisplayConfiguration(DeIdCardBack.DOCUMENT_NORMALIZED_TYPE, "Id Card Back Side"),
-          DocumentsDisplayConfiguration(DePassport.DOCUMENT_NORMALIZED_TYPE, "Passport"),
-          DocumentsDisplayConfiguration(MRZ.DOCUMENT_NORMALIZED_TYPE, "MRZ on document back"),
-          DocumentsDisplayConfiguration(DeDriverLicenseFront.DOCUMENT_NORMALIZED_TYPE, "Licence plate Front"),
-          DocumentsDisplayConfiguration(DeDriverLicenseBack.DOCUMENT_NORMALIZED_TYPE, "Licence plate Back"),
-        ]
-      );
+          acceptedDocumentTypes: [
+            GenericDocumentType.DE_DRIVER_LICENSE_FRONT,
+            GenericDocumentType.DE_DRIVER_LICENSE_BACK,
+            GenericDocumentType.DE_ID_CARD_FRONT,
+            GenericDocumentType.DE_ID_CARD_BACK,
+            GenericDocumentType.DE_PASSPORT,
+          ],
+          topBarBackgroundColor: Colors.red,
+          fieldConfidenceLowColor: Colors.blue,
+          fieldConfidenceHighColor: Colors.purpleAccent,
+          fieldsDisplayConfiguration: [
+            // All types of documents have its own class for field signatures, e.g. DeIdCardFront -> DeIdCardFrontFieldsSignatures. From this classes you can take field signatures for each field you want to configure.
+            FieldsDisplayConfiguration(DeIdCardFrontFieldsSignatures.Surname, "My Surname", FieldDisplayState.ALWAYS_VISIBLE),
+            FieldsDisplayConfiguration(DeIdCardFrontFieldsSignatures.GivenNames, "My GivenNames", FieldDisplayState.ALWAYS_VISIBLE),
+            FieldsDisplayConfiguration(DeIdCardFrontFieldsSignatures.BirthDate, "My Birth Date", FieldDisplayState.ALWAYS_VISIBLE),
+            FieldsDisplayConfiguration(DeIdCardFrontFieldsSignatures.ExpiryDate, "Document Expiry Date", FieldDisplayState.ALWAYS_VISIBLE),
+            FieldsDisplayConfiguration(DeIdCardBackFieldsSignatures.Address, "My address", FieldDisplayState.ALWAYS_VISIBLE),
+            FieldsDisplayConfiguration(DeIdCardBackFieldsSignatures.IssueDate, "When issued", FieldDisplayState.ALWAYS_VISIBLE),
+            FieldsDisplayConfiguration(DeIdCardBackFieldsSignatures.IssuingAuthority, "Who issued", FieldDisplayState.ALWAYS_VISIBLE),
+            FieldsDisplayConfiguration(MRZFieldsSignatures.DocumentNumber, "My Doc Num", FieldDisplayState.ALWAYS_VISIBLE),
+            FieldsDisplayConfiguration(MRZFieldsSignatures.Surname, "My Surname", FieldDisplayState.ALWAYS_VISIBLE),
+          ],
+          documentsDisplayConfiguration: [
+            DocumentsDisplayConfiguration(DeIdCardBack.DOCUMENT_NORMALIZED_TYPE, "Id Card Back Side"),
+            DocumentsDisplayConfiguration(DePassport.DOCUMENT_NORMALIZED_TYPE, "Passport"),
+            DocumentsDisplayConfiguration(MRZ.DOCUMENT_NORMALIZED_TYPE, "MRZ on document back"),
+            DocumentsDisplayConfiguration(DeDriverLicenseFront.DOCUMENT_NORMALIZED_TYPE, "Licence plate Front"),
+            DocumentsDisplayConfiguration(DeDriverLicenseBack.DOCUMENT_NORMALIZED_TYPE, "Licence plate Back"),
+          ]);
       result = await ScanbotSdkUi.startGenericDocumentRecognizer(config);
       _showGenericDocumentRecognizerResult(result);
     } catch (e) {
@@ -492,15 +498,12 @@ class _MainPageWidgetState extends State<MainPageWidget> {
           final random = Random();
           final randomNumber = random.nextInt(4) + 2;
           await Future.delayed(Duration(seconds: randomNumber));
-          return BarcodeFormattedData(
-              title: item.barcodeFormat.toString(),
-              subtitle: (item.text ?? '') + 'custom string');
+          return BarcodeFormattedData(title: item.barcodeFormat.toString(), subtitle: (item.text ?? '') + 'custom string');
         },
         cancelButtonTitle: 'Cancel',
         enableCameraButtonTitle: 'camera enable',
         enableCameraExplanationText: 'explanation text',
-        finderTextHint:
-            'Please align any supported barcode in the frame to scan it.',
+        finderTextHint: 'Please align any supported barcode in the frame to scan it.',
         // clearButtonTitle: "CCCClear",
         // submitButtonTitle: "Submitt",
         barcodesCountText: '%d codes',
@@ -525,8 +528,7 @@ class _MainPageWidgetState extends State<MainPageWidget> {
       final result = await ScanbotSdkUi.startBatchBarcodeScanner(config);
       if (result.operationResult == OperationResult.SUCCESS) {
         await Navigator.of(context).push(
-          MaterialPageRoute(
-              builder: (context) => BarcodesResultPreviewWidget(result)),
+          MaterialPageRoute(builder: (context) => BarcodesResultPreviewWidget(result)),
         );
       }
     } catch (e) {
@@ -547,18 +549,14 @@ class _MainPageWidgetState extends State<MainPageWidget> {
       }
 
       ///before processing image sdk need storage read permission
-      final permissions =
-          await [Permission.storage, Permission.photos].request();
-      if (permissions[Permission.storage] ==
-              PermissionStatus.granted || //android
+      final permissions = await [Permission.storage, Permission.photos].request();
+      if (permissions[Permission.storage] == PermissionStatus.granted || //android
           permissions[Permission.photos] == PermissionStatus.granted) {
         //ios
-        var result = await ScanbotSdk.detectBarcodesOnImage(
-            Uri.file(uriPath), PredefinedBarcodes.allBarcodeTypes());
+        var result = await ScanbotSdk.detectBarcodesOnImage(Uri.file(uriPath), PredefinedBarcodes.allBarcodeTypes());
         if (result.operationResult == OperationResult.SUCCESS) {
           await Navigator.of(context).push(
-            MaterialPageRoute(
-                builder: (context) => BarcodesResultPreviewWidget(result)),
+            MaterialPageRoute(builder: (context) => BarcodesResultPreviewWidget(result)),
           );
         }
       }
@@ -585,18 +583,13 @@ class _MainPageWidgetState extends State<MainPageWidget> {
       }
 
       ///before processing image sdk need storage read permission
-      final permissions =
-          await [Permission.storage, Permission.photos].request();
-      if (permissions[Permission.storage] ==
-              PermissionStatus.granted || //android
+      final permissions = await [Permission.storage, Permission.photos].request();
+      if (permissions[Permission.storage] == PermissionStatus.granted || //android
           permissions[Permission.photos] == PermissionStatus.granted) {
         //ios
-        var result = await ScanbotSdk.detectBarcodesOnImages(
-            uris, PredefinedBarcodes.allBarcodeTypes());
+        var result = await ScanbotSdk.detectBarcodesOnImages(uris, PredefinedBarcodes.allBarcodeTypes());
         if (result.operationResult == OperationResult.SUCCESS) {
-          await Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => MultiImageBarcodesResultPreviewWidget(
-                  result.barcodeResults)));
+          await Navigator.of(context).push(MaterialPageRoute(builder: (context) => MultiImageBarcodesResultPreviewWidget(result.barcodeResults)));
         }
       }
     } catch (e) {
@@ -610,10 +603,7 @@ class _MainPageWidgetState extends State<MainPageWidget> {
     }
     LicensePlateScanResult requestResult;
     try {
-      var config = LicensePlateScannerConfiguration(
-          topBarBackgroundColor: Colors.pink,
-          topBarButtonsActiveColor: Colors.white70,
-          confirmationDialogAccentColor: Colors.green);
+      var config = LicensePlateScannerConfiguration(topBarBackgroundColor: Colors.pink, topBarButtonsActiveColor: Colors.white70, confirmationDialogAccentColor: Colors.green);
       requestResult = await ScanbotSdkUi.startLicensePlateScanner(config);
       if (requestResult.operationResult == OperationResult.SUCCESS) {
         showResultTextDialog(requestResult.rawText);
@@ -637,8 +627,7 @@ class _MainPageWidgetState extends State<MainPageWidget> {
 
       ///before processing an image the SDK need storage read permission
       var permissions = await [Permission.storage, Permission.photos].request();
-      if (permissions[Permission.storage] ==
-              PermissionStatus.granted || //android
+      if (permissions[Permission.storage] == PermissionStatus.granted || //android
           permissions[Permission.photos] == PermissionStatus.granted) {
         //ios
         var page = await ScanbotSdk.createPage(Uri.file(uriPath), true);
@@ -698,18 +687,15 @@ class _MainPageWidgetState extends State<MainPageWidget> {
     }
   }
 
-  Future<void> _showBarcodeScanningResult(
-      final BarcodeScanningResult result) async {
+  Future<void> _showBarcodeScanningResult(final BarcodeScanningResult result) async {
     if (result.operationResult == OperationResult.SUCCESS) {
       await Navigator.of(context).push(
-        MaterialPageRoute(
-            builder: (context) => BarcodesResultPreviewWidget(result)),
+        MaterialPageRoute(builder: (context) => BarcodesResultPreviewWidget(result)),
       );
     }
   }
 
-  Future<void> _showGenericDocumentRecognizerResult(
-      final GenericDocumentWrappedResults result) async {
+  Future<void> _showGenericDocumentRecognizerResult(final GenericDocumentWrappedResults result) async {
     if (isOperationSuccessful(result)) {
       await Navigator.of(context).push(
         MaterialPageRoute(
@@ -738,10 +724,7 @@ class _MainPageWidgetState extends State<MainPageWidget> {
     if (result != null) {
       if (isOperationSuccessful(result)) {
         var concatenate = StringBuffer();
-        result.fields
-            .map((field) =>
-                "${field.type.toString().replaceAll("HealthInsuranceCardFieldType.", "")}:${field.value}\n")
-            .forEach((s) {
+        result.fields.map((field) => "${field.type.toString().replaceAll("HealthInsuranceCardFieldType.", "")}:${field.value}\n").forEach((s) {
           concatenate.write(s);
         });
         await showAlertDialog(context, concatenate.toString());
@@ -769,8 +752,7 @@ class _MainPageWidgetState extends State<MainPageWidget> {
 
     if (result != null && isOperationSuccessful(result)) {
       Navigator.of(context).push(
-        MaterialPageRoute(
-            builder: (context) => MrzDocumentResultPreview(result)),
+        MaterialPageRoute(builder: (context) => MrzDocumentResultPreview(result)),
       );
     }
   }
